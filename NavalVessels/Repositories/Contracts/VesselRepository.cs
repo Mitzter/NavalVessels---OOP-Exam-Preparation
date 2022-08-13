@@ -7,39 +7,32 @@ namespace NavalVessels.Repositories.Contracts
 {
     public class VesselRepository : IRepository<IVessel>
     {
-        private ICollection<IVessel> vessels;
+        private Dictionary<string, IVessel> vessels;
         public VesselRepository()
         {
-            this.vessels = new HashSet<IVessel>();
+            this.vessels = new Dictionary<string, IVessel>();
         }
-        public IReadOnlyCollection<IVessel> Models
-        {
-            get => (IReadOnlyCollection<IVessel>)this.vessels;
-            private set => this.vessels = (ICollection<IVessel>)value;
-        }
+        public IReadOnlyCollection<IVessel> Models => this.vessels.Values;
 
         public void Add(IVessel model)
         {
-            vessels.Add(model);
+            vessels.Add(model.Name, model);
         }
 
         public IVessel FindByName(string name)
         {
-            foreach (var vessel in vessels)
+            if (vessels.ContainsKey(name))
             {
-                if (vessel.Name == name)
-                {
-                    return vessel;
-                }
+                return this.vessels.GetValueOrDefault(name);
             }
             return null;
         }
 
         public bool Remove(IVessel model)
         {
-            if (vessels.Contains(model))
+            if (vessels.ContainsValue(model))
             {
-                vessels.Remove(model);
+                vessels.Remove(model.Name, out model);
                 return true;
             }
             return false;

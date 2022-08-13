@@ -42,8 +42,21 @@ namespace NavalVessels.Models
         }
         public override string ToString()
         {
-            
+
             var sb = new StringBuilder();
+            sb.AppendLine($"- {this.Name}");
+            sb.AppendLine($"*Type: {this.GetType().Name}");
+            sb.AppendLine($"*Armor thickness: {this.ArmorThickness}");
+            sb.AppendLine($"*Main weapon caliber: {this.MainWeaponCaliber}");
+            sb.AppendLine($"*Speed: {this.Speed} knots");
+            if (Targets.Count == 0)
+            {
+                sb.AppendLine($"*Targets: None");
+            }
+            else
+            {
+                sb.AppendLine($"*Targets: {String.Join(",", this.Targets)}");
+            }
             if (this.SonarMode == true)
             {
                 sb.AppendLine($"*Sonar mode: ON");
@@ -52,7 +65,7 @@ namespace NavalVessels.Models
             {
                 sb.AppendLine($"*Sonar mode: OFF");
             }
-            return base.ToString() + sb.ToString();
+            return sb.ToString();
 
         }
     }

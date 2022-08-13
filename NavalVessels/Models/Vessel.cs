@@ -20,7 +20,7 @@ namespace NavalVessels.Models
             this.MainWeaponCaliber = mainWeaponCaliber;
             this.Speed = speed;
             this.ArmorThickness = armorThickness;
-            targets = new List<string>();
+            targets = new HashSet<string>();
         }
         public string Name
         {
@@ -73,35 +73,19 @@ namespace NavalVessels.Models
             {
                 throw new NullReferenceException(ExceptionMessages.InvalidTarget);
             }
-            if (target.ArmorThickness - this.MainWeaponCaliber < 0)
+            double targetArmor = target.ArmorThickness;
+            double attackCalibre = this.MainWeaponCaliber;
+            target.ArmorThickness -= attackCalibre;
+
+            if (target.ArmorThickness < 0)
             {
                 target.ArmorThickness = 0;
             }
-            target.ArmorThickness -= this.MainWeaponCaliber;
-            this.Targets.Add(target.Name);
+            Targets.Add(target.Name);
         }
 
-        public virtual void RepairVessel()
-        {
-            this.ArmorThickness = default;
-        }
+        public abstract void RepairVessel();
 
-        public override string ToString()
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine($"- {this.Name}");
-            sb.AppendLine($"*Type: {this.GetType().Name}");
-            sb.AppendLine($"*Armor thickness: {this.ArmorThickness}");
-            sb.AppendLine($"*Main weapon caliber: {this.MainWeaponCaliber}");
-            if (Targets.Count == 0)
-            {
-                sb.AppendLine($"*Targets: None");
-            }
-            else
-            {
-                sb.AppendLine($"*Targets: {String.Join(",", this.Targets)}");
-            }
-            return sb.ToString().TrimEnd();
-        }
+        public abstract override string ToString();
     }
 }
