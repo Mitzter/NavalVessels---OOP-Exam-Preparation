@@ -81,7 +81,7 @@ namespace NavalVessels.Models
             this.Targets.Add(target.Name);
         }
 
-        public void RepairVessel()
+        public virtual void RepairVessel()
         {
             this.ArmorThickness = default;
         }
